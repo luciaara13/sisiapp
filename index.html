@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SisiMatches</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8f1;--card:#fff;--ink:#2b1a10;--mut:#7a5f4c;--line:#f0dcc9;--now:#d9480f;--nowbg:#fff0e5;--wk:#8a4a12;--wkbg:#f7ead9;--onnow:#fff;--bad:#c62f4b;--ok:#1a8a4a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1510;--card:#2a1d15;--ink:#fbeee2;--mut:#c9ae98;--line:#4a3426;--now:#ff8a3d;--nowbg:#4a2a14;--wk:#d9a46a;--wkbg:#3a2a18;--onnow:#2b1a10;--bad:#ff6b87;--ok:#4cd68a}}
+:root[data-theme="dark"]{--bg:#1e1510;--card:#2a1d15;--ink:#fbeee2;--mut:#c9ae98;--line:#4a3426;--now:#ff8a3d;--nowbg:#4a2a14;--wk:#d9a46a;--wkbg:#3a2a18;--onnow:#2b1a10;--bad:#ff6b87;--ok:#4cd68a}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;min-height:100vh}
+h1,h2,h3{font-family:'Bricolage Grotesque',Figtree,sans-serif;margin:0;line-height:1.15}
+h1{font-size:2rem;font-weight:800}h2{font-size:1.35rem;font-weight:800}h3{font-size:1.05rem;font-weight:600}
+#app{max-width:640px;margin:0 auto;padding:0 16px calc(84px + env(safe-area-inset-bottom,0px))}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 0;gap:8px}
+.logo{font:800 1.25rem 'Bricolage Grotesque',sans-serif}.logo i{font-style:normal;color:var(--now)}
+select,input,textarea,button{font:inherit;color:inherit}
+select,input,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--card)}
+textarea{min-height:80px}label{display:block;font-weight:700;font-size:.9rem;margin:12px 0 4px}
+.demo select{width:auto;font-size:.82rem;padding:6px 8px}
+button{cursor:pointer;border:0;border-radius:10px;padding:11px 16px;font-weight:700;background:var(--now);color:var(--onnow)}
+button.sec{background:transparent;border:1.5px solid var(--line);color:var(--ink)}button.bad{background:var(--bad);color:#fff}button.ok{background:var(--ok);color:#fff}
+button.sm{padding:7px 12px;font-size:.88rem}button:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--now);outline-offset:2px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav div{display:flex;width:100%;max-width:640px}nav button{flex:1;background:none;color:var(--mut);border-radius:0;padding:14px 4px;font-size:.88rem}nav button.on{color:var(--now);box-shadow:inset 0 3px var(--now)}
+.sec-t{display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 10px}.sec-t span{color:var(--mut);font-size:.88rem}
+.now{background:var(--nowbg);border:2px solid var(--now);border-radius:28px 28px 28px 6px;padding:14px 16px;margin-bottom:10px}
+.wk{background:var(--card);border:1.5px solid var(--line);border-left:10px solid var(--wk);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.meta{color:var(--mut);font-size:.88rem}.pay{font:800 1.2rem 'Bricolage Grotesque',sans-serif}
+.pill{display:inline-block;font-size:.78rem;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--line)}
+.pill.g{background:var(--wkbg);color:var(--wk)}.pill.p{background:var(--nowbg);color:var(--now)}.pill.r{background:#fde3e8;color:var(--bad)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.sp{justify-content:space-between}
+.hero{padding:26px 0 8px}.hero p{color:var(--mut);max-width:48ch}
+.note{background:var(--wkbg);border-radius:10px;padding:10px 12px;font-size:.88rem;margin:10px 0}
+.warn{background:#fff3d6;color:#6b4a00;border-radius:10px;padding:10px 12px;font-size:.88rem;margin:10px 0}
+.modal{position:fixed;inset:0;background:rgba(10,12,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:9}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:90vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.msgs{display:flex;flex-direction:column;gap:6px;margin:10px 0;max-height:40vh;overflow:auto}
+.m{max-width:80%;padding:8px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line)}.m.me{align-self:flex-end;background:var(--nowbg)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;z-index:20;font-size:.9rem}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:.88rem;margin-top:10px}.chk input{width:auto;margin-top:4px}
+a{color:var(--now)}
+.days{display:flex;gap:8px;overflow-x:auto;padding:6px 0}.day{flex:0 0 auto;min-width:64px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;padding:6px 8px;display:flex;flex-direction:column;align-items:center;gap:0}
+.day small{color:var(--mut);font-weight:500}.day.on{background:var(--now);border-color:var(--now);color:var(--onnow)}.day.on small{color:var(--onnow)}.day i{width:6px;height:6px;border-radius:50%;background:var(--wk);margin-top:2px}.day.on i{background:var(--onnow)}
+@media(prefers-reduced-motion:no-preference){.sheet{animation:up .2s ease-out}@keyframes up{from{transform:translateY(30px);opacity:0}}}
+</style></head><body><div id="app"></div>
+<script>
+const KEY='sisi_v1',CATS=['Canguro','Recados','Eventos','Cuidar casa/mascotas','Clases particulares','Otros'];
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S,sheet=null,toastT;
+const iso=d=>{const x=new Date();x.setDate(x.getDate()+d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
+const seed=()=>({v:3,me:null,view:'student',tab:'home',q:{cat:'',txt:'',min:0,type:'',when:''},reports:[],
+ pending:[{id:'p1',kind:'stu',name:'Ana R.',email:'ana.r@alumni.upv.es',doc:'certificado_ana.pdf',info:'Psicología · UPV'}],
+ jobs:[
+ {id:'j1',type:'now',title:'Ayuda con mudanza de cajas',cat:'Otros',when:'Hoy, 18:00',date:iso(0),dur:'2 h',pay:12,zone:'Benimaclet',desc:'Cargar cajas de un 2.º sin ascensor a una furgoneta.',owner:'Familia Ortiz',mine:0,apps:[],chat:[],status:'open',ex:1},
+ {id:'j2',type:'now',title:'Camarero/a para cumpleaños',cat:'Eventos',when:'Sáb 10, 20:00',date:iso(1),dur:'4 h',pay:11,zone:'Ruzafa',desc:'Servir bebidas y recoger en una fiesta de 25 personas.',owner:'Marta S.',mine:0,apps:[],chat:[],status:'open',ex:1},
+ {id:'j3',type:'week',title:'Recoger a dos niños del cole',cat:'Canguro',when:'Lun y Mié, 16:45–19:00',date:iso(0),end:iso(90),days:[1,3],dur:'2 h 15',pay:10,zone:'Campanar',desc:'Recoger, merendar y ayudar con deberes. Se pide certificado de delitos sexuales.',owner:'Familia Ortiz',mine:0,apps:[],chat:[],status:'open',ex:1},
+ {id:'j4',type:'week',title:'Pasear a un perro',cat:'Cuidar casa/mascotas',when:'Mar, Jue y Vie, 14:00',date:iso(0),end:iso(60),days:[2,4,5],dur:'45 min',pay:9,zone:'Camins al Grau',desc:'Perro mediano, muy tranquilo.',owner:'Pablo G.',mine:0,apps:[],chat:[],status:'open',ex:1},
+ {id:'j5',type:'week',title:'Cuidar a un niño de 6 años',cat:'Canguro',when:'Sáb y Dom, 10:00–14:00',date:iso(0),end:iso(60),days:[6,7],dur:'4 h',pay:11,zone:'Patraix',desc:'Juegos y comida. Se pide certificado de delitos sexuales.',owner:'Familia Ortiz',mine:0,apps:[],chat:[],status:'open',ex:1}]});
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!S||S.v!==3)S=seed()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(t){clearTimeout(toastT);let d=$('.toast');if(d)d.remove();d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);toastT=setTimeout(()=>d.remove(),2400)}
+const me=()=>S.me,isVer=()=>me()&&me().ver==='ok';
+const LEGAL={
+ aviso:['Aviso legal','Titular: [pendiente: nombre/razón social, NIF, domicilio y email de contacto] (LSSI). SisiMatches es un prototipo en fase de piloto.'],
+ priv:['Política de privacidad','[Borrador] Datos tratados: cuenta, perfil (nombre, estudios, universidad, teléfono, redes), documentos de verificación (certificado de estudiante, DNI/CIF) y mensajes. El teléfono y el DNI no se muestran a otros usuarios. Finalidad: gestionar la plataforma y verificar a los estudiantes. Los documentos se borran cuando se aprueba la verificación. Derechos RGPD/LOPDGDD: acceso, rectificación, supresión, oposición, limitación y portabilidad. Pendiente de revisión por un abogado.'],
+ cook:['Política de cookies','Este prototipo no usa cookies de analítica. Solo guarda tus datos de sesión en tu navegador.'],
+ tyc:['Términos y condiciones','[Borrador] SisiMatches publica anuncios y facilita el contacto entre estudiantes verificados y ofertantes. No es empleador, ni agencia, ni ETT, no fija precios, no asigna trabajos y no controla su ejecución. Los acuerdos y el pago son directos entre las partes, que responden de sus obligaciones legales (Seguridad Social, empleo de hogar, declaración de ingresos). Edad mínima: 18 años. Para cuidar menores, el ofertante puede pedir el certificado de delitos sexuales. Pendiente de revisión por un laboralista.'],
+ norm:['Normas de la comunidad','Trato respetuoso, anuncios reales, sin pedir datos bancarios por chat y sin precios por debajo del salario mínimo cuando haya relación laboral. Usa el botón Denunciar si algo no cuadra.']};
+const legalLinks=()=>Object.entries(LEGAL).map(([k,v])=>`<a href="#" data-a="legal" data-k="${k}">${v[0]}</a>`).join(' · ');
+
+function jobCard(j){
+ const n=j.type==='now',tag=n?'<span class="pill p">Ocasional</span>':'<span class="pill g">Recurrente</span>';
+ return `<div class="${n?'now':'wk'}"><div class="row sp" style="margin:0"><h3>${esc(j.title)}</h3><span class="pay">${j.pay} €/h</span></div>
+ <div class="meta">${esc(j.when)} · ${esc(j.dur)} · ${esc(j.zone)}</div>
+ <div class="row sp">${tag}<span>${j.ex?'<span class="pill">Ejemplo</span> ':''}<button class="sm ${n?'':'sec'}" data-a="job" data-id="${j.id}">${n?'Ver y apuntarme':'Ver horario'}</button></span></div></div>`}
+const open=()=>S.jobs.filter(j=>j.status==='open');
+
+function auth(){return `<div class="hero"><div class="logo">Sisi<i>Matches</i></div><h1 style="margin-top:14px">Trabajos cortos cerca de ti, con estudiantes verificados</h1>
+ <p>Tablón que conecta a estudiantes con quien necesita ayuda. Los acuerdos y el pago son entre las partes.</p></div>
+ <div class="card"><h2>Crea tu cuenta</h2>
+ <label for="n">Nombre</label><input id="n" autocomplete="name">
+ <label for="e">Correo</label><input id="e" type="email" autocomplete="email" placeholder="tu@correo.es">
+ <label for="r">Quiero…</label><select id="r"><option value="student">Buscar trabajo (estudiante)</option><option value="employer">Publicar trabajos (ofertante)</option></select>
+ <label class="chk"><input type="checkbox" id="c1"><span>Soy mayor de 18 años.</span></label>
+ <label class="chk"><input type="checkbox" id="c2"><span>Acepto los términos y la política de privacidad.</span></label>
+ <div class="row"><button data-a="signup">Crear cuenta</button></div>
+ <p class="meta">Prototipo: tus datos solo se guardan en este navegador.</p><div class="meta">${legalLinks()}</div></div>`}
+
+function home(){
+ const now=open().filter(j=>j.type==='now'),wk=open().filter(j=>j.type==='week');
+ return `${isVer()?'':`<div class="warn">Verifica que eres estudiante para apuntarte a trabajos. <a href="#" data-a="tab" data-t="profile">Verificar ahora</a></div>`}
+ <div class="sec-t"><h2>Ocasionales</h2><span>puntuales, de una sola vez</span></div>${now.map(jobCard).join('')||'<p class="meta">No hay trabajos ocasionales ahora mismo. Vuelve en un rato.</p>'}
+ <div class="sec-t"><h2>Recurrentes</h2><span>se repiten cada semana</span></div>${wk.map(jobCard).join('')||'<p class="meta">Aún no hay trabajos recurrentes.</p>'}`}
+
+const pd=s=>{const[a,b,c]=s.split('-');return new Date(+a,b-1,+c)};
+function occurs(j,w){if(!w)return true;const t=new Date();t.setHours(0,0,0,0);let a=new Date(t),b=new Date(t);
+ if(/^\d/.test(w)){a=pd(w);b=pd(w)}
+ if(w==='week'){a.setDate(t.getDate()-((t.getDay()+6)%7));b=new Date(a);b.setDate(a.getDate()+6)}
+ if(w==='month'){a=new Date(t.getFullYear(),t.getMonth(),1);b=new Date(t.getFullYear(),t.getMonth()+1,0)}
+ const st=pd(j.date),en=j.end?pd(j.end):st;
+ for(let d=new Date(a);d<=b;d.setDate(d.getDate()+1)){if(d<st||d>en)continue;if(j.type==='week'?(j.days||[]).includes(d.getDay()||7):+d===+st)return true}return false}
+function cal(q){const D=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],rec=open().filter(j=>j.type==='week');let h='';
+ for(let i=0;i<14;i++){const d=iso(i),x=pd(d),has=rec.some(j=>occurs(j,d));h+=`<button class="day ${q.when===d?'on':''}" data-a="when" data-w="${d}" aria-pressed="${q.when===d}"><small>${D[x.getDay()]}</small><b>${i===0?'Hoy':i===1?'Mañana':x.getDate()}</b>${has?'<i title="Hay trabajos"></i>':'<i style="visibility:hidden"></i>'}</button>`}
+ return `<div class="row" style="margin:12px 0 4px">${[['','Cualquier fecha'],['week','Esta semana'],['month','Este mes']].map(([w,l])=>`<button class="sm ${q.when===w?'':'sec'}" data-a="when" data-w="${w}">${l}</button>`).join('')}</div>
+ <div class="days" role="group" aria-label="Elige un día">${h}</div><p class="meta" style="margin:2px 0 0">El punto marca los días con trabajos recurrentes.</p>
+ <label for="od">Otra fecha</label><input id="od" type="date" data-f="when" min="${iso(0)}" value="${/^\d/.test(q.when)?q.when:''}">`}
+function search(){const q=S.q;
+ const list=open().filter(j=>(!q.cat||j.cat===q.cat)&&j.pay>=q.min&&(!q.type||j.type===q.type)&&(q.type!=='week'||occurs(j,q.when))&&(!q.txt||(j.title+j.zone+j.desc).toLowerCase().includes(q.txt.toLowerCase())));
+ return `<div class="sec-t"><h2>Buscar</h2></div><div class="card">
+ <input id="qt" placeholder="Palabra o zona" value="${esc(q.txt)}" data-f="txt">
+ <div class="row"><select data-f="type" aria-label="Tipo"><option value="">Ocasionales y recurrentes</option><option value="now" ${q.type==='now'?'selected':''}>Ocasionales</option><option value="week" ${q.type==='week'?'selected':''}>Recurrentes</option></select><select data-f="cat" aria-label="Categoría"><option value="">Todas las categorías</option>${CATS.map(c=>`<option ${q.cat===c?'selected':''}>${c}</option>`).join('')}</select>
+ <select data-f="min" aria-label="Pago mínimo">${[0,9,10,12].map(v=>`<option value="${v}" ${q.min==v?'selected':''}>${v?`Desde ${v} €/h`:'Cualquier pago'}</option>`).join('')}</select></div>${q.type==='week'?cal(q):''}</div>
+ ${list.map(jobCard).join('')||'<p class="meta">Nada con esos filtros. Prueba a quitar alguno.</p>'}`}
+
+function myApps(){
+ const l=S.jobs.filter(j=>j.apps.some(a=>a.uid==='me'));
+ return `<div class="sec-t"><h2>Mis postulaciones</h2></div>${l.map(j=>{const a=j.apps.find(a=>a.uid==='me');
+ const st={pending:'<span class="pill">Pendiente</span>',accepted:'<span class="pill g">Aceptada</span>',rejected:'<span class="pill r">Rechazada</span>'}[a.status];
+ return `<div class="card"><div class="row sp" style="margin:0"><h3>${esc(j.title)}</h3>${st}</div><div class="meta">${esc(j.when)} · ${esc(j.owner)}</div>
+ <div class="row">${a.status==='pending'&&j.ex?`<button class="sm sec" data-a="simacc" data-id="${j.id}">Simular aceptación (demo)</button>`:''}
+ ${a.status==='accepted'?`<button class="sm" data-a="chat" data-id="${j.id}">Abrir chat</button>`:''}
+ ${j.status==='done'?rateBtn(j):''}</div></div>`}).join('')||'<p class="meta">Aún no te has apuntado a nada. Mira “Inicio”.</p>'}`}
+const rateBtn=j=>j.rated?`<span class="pill g">Valorado ${j.rated}★</span>`:`<button class="sm" data-a="rate" data-id="${j.id}">Valorar</button>`;
+
+function employer(){const l=S.jobs.filter(j=>j.mine);
+ return `<div class="sec-t"><h2>Mis ofertas</h2><button class="sm" data-a="tab" data-t="post">Publicar</button></div>${l.map(j=>`<div class="card"><div class="row sp" style="margin:0"><h3>${esc(j.title)}</h3><span class="pill ${j.status==='open'?'p':'g'}">${{open:'Abierta',filled:'Cubierta',done:'Terminada'}[j.status]}</span></div>
+ <div class="meta">${esc(j.when)} · ${j.pay} €/h</div>
+ ${j.apps.map(a=>`<div class="row sp"><span>${esc(a.name)} ${a.ver?'<span class="pill g">Verificado</span>':''}${a.cv?' <span class="pill">CV</span>':''}</span><span>${a.status==='pending'?`<button class="sm ok" data-a="acc" data-id="${j.id}" data-u="${a.uid}">Aceptar</button> <button class="sm sec" data-a="rej" data-id="${j.id}" data-u="${a.uid}">Rechazar</button>`:`<span class="pill">${a.status==='accepted'?'Aceptado':'Rechazado'}</span>`}</span></div>`).join('')||'<p class="meta">Sin postulaciones aún.</p>'}
+ <div class="row">${j.apps.some(a=>a.status==='accepted')?`<button class="sm" data-a="chat" data-id="${j.id}">Chat</button>`:''}${j.status==='filled'?`<button class="sm sec" data-a="done" data-id="${j.id}">Marcar terminado</button>`:''}${j.status==='done'?rateBtn(j):''}</div></div>`).join('')||'<p class="meta">Aún no has publicado nada.</p>'}`}
+
+function post(){const m=me(),t=iso(0),dn=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+ return `<div class="sec-t"><h2>Publicar trabajo</h2></div>${m.idv?'':`<div class="warn">Para publicar, verifica tu identidad en tu perfil.</div>`}
+ <div class="card"><label for="t">Título</label><input id="t" placeholder="Ej.: Canguro viernes noche">
+ <label for="ty">Tipo</label><select id="ty"><option value="now">Ocasional (una vez)</option><option value="week">Recurrente (cada semana)</option></select>
+ <div id="occ"><label for="wd">Fecha</label><input id="wd" type="date" min="${t}"></div>
+ <div id="rec" hidden><label>Días de la semana</label><div class="row">${dn.map((d,i)=>`<label class="chk" style="margin:0"><input type="checkbox" class="dy" value="${i+1}"><span>${d}</span></label>`).join('')}</div>
+ <label for="sd">Desde</label><input id="sd" type="date" min="${t}" value="${t}"><label for="ed">Hasta (opcional)</label><input id="ed" type="date" min="${t}"></div>
+ <label for="wt">Hora</label><input id="wt" type="time"><label for="ct">Categoría</label><select id="ct">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+ <label for="d">Duración</label><input id="d" placeholder="Ej.: 3 h"><label for="p">Pago por hora (€)</label><input id="p" type="number" min="1" step="0.5">
+ <label for="z">Zona aproximada</label><input id="z" placeholder="Barrio, sin dirección exacta"><label for="ds">Descripción y requisitos</label><textarea id="ds"></textarea>
+ <div class="row"><button data-a="publish" ${m.idv?'':'disabled'}>Publicar</button></div><p class="meta">El pago se acuerda y se hace directamente entre las partes.</p></div>`}
+
+const val=x=>$(x)?$(x).value.trim():undefined;
+function readForm(){const m=me();[['name','#pn'],['studies','#st'],['uni','#un'],['phone','#ph'],['li','#li'],['ig','#ig'],['tk','#tk'],['skills','#sk'],['zone','#zn'],['etype','#et'],['dni','#dn'],['city','#ec'],['web','#ew']].forEach(([k,i])=>{const x=val(i);if(x!==undefined)m[k]=x});
+ if($('#en')){m.name=val('#en')}if($('#ep')){m.phone=val('#ep')}}
+const okPhone=p=>/^(\+34)?[6-9]\d{8}$/.test((p||'').replace(/\s/g,''));
+function okDoc(t,v){v=(v||'').toUpperCase().replace(/[\s-]/g,'');const L='TRWAGMYFPDXBNJZSQVHLCKE';
+ if(t==='emp')return /^[ABCDEFGHJNPQRSUVW]\d{7}[0-9A-J]$/.test(v);
+ if(/^\d{8}[A-Z]$/.test(v))return L[+v.slice(0,8)%23]===v[8];
+ return /^[XYZ]\d{7}[A-Z]$/.test(v)&&L[+('XYZ'.indexOf(v[0])+v.slice(1,8))%23]===v[8]}
+const stuMissing=m=>[!m.name&&'nombre',!m.studies&&'estudios',!m.uni&&'universidad',!okPhone(m.phone)&&'teléfono válido'].filter(Boolean);
+const empMissing=m=>[!m.name&&'nombre o razón social',!okDoc(m.etype,m.dni)&&(m.etype==='emp'?'CIF válido':'DNI/NIE válido'),!okPhone(m.phone)&&'teléfono válido',!m.city&&'ciudad'].filter(Boolean);
+function profile(){const m=me(),stu=S.view==='student',f=(id,l,k,ph='',t='text')=>`<label for="${id}">${l}</label><input id="${id}" type="${t}" value="${esc(m[k]||'')}" placeholder="${ph}">`,
+ fl=(id,k,l,acc)=>`<label for="${id}">${l}</label><input type="file" id="${id}" data-k="${k}" accept="${acc}">${m[k]?`<div class="meta">Subido: ${esc(m[k])}</div>`:''}`;
+ if(stu)return `<div class="sec-t"><h2>${esc(m.name)}</h2><span>Estudiante</span></div>
+ <div class="card"><h3>Mis datos</h3><p class="meta">Obligatorios para verificarte: nombre, estudios, universidad y teléfono. El teléfono solo lo ve el equipo de verificación.</p>
+ ${f('pn','Nombre y apellidos','name')}${f('st','Estudios','studies','Ej.: Grado en Psicología')}${f('un','Universidad','uni','Ej.: UPV')}${f('ph','Teléfono de contacto','phone','600 000 000','tel')}
+ ${f('sk','Habilidades (opcional)','skills','Ej.: inglés, primeros auxilios')}${f('zn','Zona (opcional)','zone')}
+ <h3 style="margin-top:16px">Redes sociales (opcional)</h3>${f('li','LinkedIn','li','https://linkedin.com/in/…')}${f('ig','Instagram','ig','@usuario')}${f('tk','TikTok','tk','@usuario')}
+ <div class="row"><button class="sm" data-a="saveprof">Guardar</button></div></div>
+ <div class="card"><h3>Documentos</h3>${fl('cv','cv','Currículum (CV, opcional)','.pdf,.doc,.docx')}${fl('cert','cert','Certificado de estudiante o matrícula','.pdf,image/*')}
+ <p class="meta">Prototipo: solo se guarda el nombre del archivo. En la versión real irán a almacenamiento privado y se borrarán al aprobarte.</p></div>
+ <div class="card"><h3>Verificación ${m.ver==='ok'?'<span class="pill g">Verificado</span>':m.ver==='pending'?'<span class="pill">En revisión</span>':'<span class="pill r">Sin verificar</span>'}</h3>
+ ${m.ver==='ok'?'<p class="meta">Ya puedes apuntarte a trabajos.</p>':m.ver==='pending'?'<p class="meta">Un administrador revisará tu certificado. En el demo, cambia a “admin” para aprobarlo.</p>':`<label for="ue">Opción 1: correo institucional</label><input id="ue" placeholder="usuario@alumno.upv.es" value="${esc(m.uemail||'')}">
+ <div class="row"><button class="sm" data-a="mailv">Enviar enlace de confirmación</button></div>${m.mailSent?`<div class="note">Enlace enviado (demo). <a href="#" data-a="confirm">Simular clic en el enlace</a></div>`:''}
+ <p class="meta" style="margin-top:14px">Opción 2: sin correo institucional, se revisa tu certificado a mano.</p><div class="row"><button class="sm sec" data-a="docv">Enviar certificado a revisión</button></div>`}</div>
+ ${acct()}`;
+ const emp=m.etype==='emp';
+ return `<div class="sec-t"><h2>${esc(m.name)}</h2><span>${emp?'Empresa':'Ofertante'}</span></div>
+ <div class="card"><h3>Datos del ofertante ${m.idv?'<span class="pill g">Verificado</span>':m.idvp?'<span class="pill">En revisión</span>':'<span class="pill r">Sin verificar</span>'}</h3>
+ <p class="meta">Para publicar ofertas hay que verificar la identidad. Estos datos solo los ve el equipo de verificación.</p>
+ <label for="et">Soy…</label><select id="et"><option value="part" ${emp?'':'selected'}>Particular</option><option value="emp" ${emp?'selected':''}>Empresa o autónomo</option></select>
+ ${f('en','Nombre y apellidos / razón social','name')}${f('dn','DNI o NIE (particular) / CIF (empresa)','dni','12345678Z')}${f('ep','Teléfono de contacto','phone','600 000 000','tel')}${f('ec','Ciudad','city')}${f('ew','Web o red social (opcional)','web')}
+ ${fl('dniDoc','dniDoc','Foto del DNI/NIE o CIF','image/*,.pdf')}
+ ${m.idv?'':m.idvp?'<p class="meta">En el demo, cambia a “admin” para aprobar tu verificación.</p>':'<div class="row"><button class="sm" data-a="idv">Guardar y enviar a verificación</button></div>'}
+ ${m.idv?'<div class="row"><button class="sm" data-a="saveprof">Guardar cambios</button></div>':''}</div>${acct()}`}
+const acct=()=>`<div class="card"><h3>Cuenta</h3><div class="meta">${legalLinks()}</div><div class="row"><button class="sm sec" data-a="logout">Cerrar sesión</button><button class="sm bad" data-a="del">Borrar mi cuenta</button></div></div>`;
+
+function admin(){return `<div class="sec-t"><h2>Verificaciones pendientes</h2></div>${S.pending.map(p=>`<div class="card"><div class="row sp" style="margin:0"><h3>${esc(p.name)}</h3><span class="pill ${p.kind==='emp'?'p':'g'}">${p.kind==='emp'?'Ofertante':'Estudiante'}</span></div><div class="meta">${esc(p.email)} · ${esc(p.info||'')}</div><div class="meta">Documento: ${esc(p.doc)}</div><div class="row"><button class="sm ok" data-a="apv" data-id="${p.id}">Aprobar</button><button class="sm sec" data-a="rjv" data-id="${p.id}">Rechazar</button></div></div>`).join('')||'<p class="meta">Nada pendiente.</p>'}
+ <div class="sec-t"><h2>Denuncias</h2></div>${S.reports.map((r,i)=>`<div class="card"><h3>${esc(r.title)}</h3><div class="meta">${esc(r.why)}</div><div class="row"><button class="sm bad" data-a="rmjob" data-id="${r.id}" data-i="${i}">Retirar oferta</button><button class="sm sec" data-a="dismiss" data-i="${i}">Descartar</button></div></div>`).join('')||'<p class="meta">Sin denuncias.</p>'}
+ <div class="sec-t"><h2>Ofertas publicadas</h2></div>${S.jobs.map(j=>`<div class="card row sp" style="margin-bottom:8px"><span>${esc(j.title)} <span class="meta">· ${esc(j.owner)}</span></span><button class="sm sec" data-a="rmjob" data-id="${j.id}">Retirar</button></div>`).join('')}`}
+
+function nav(){const v=S.view,t=S.tab;
+ const items=v==='student'?[['home','Inicio'],['search','Buscar'],['apps','Postulaciones'],['profile','Perfil']]:v==='employer'?[['home','Mis ofertas'],['post','Publicar'],['profile','Perfil']]:[['home','Moderación']];
+ return `<nav><div>${items.map(([k,l])=>`<button class="${t===k?'on':''}" data-a="tab" data-t="${k}">${l}</button>`).join('')}</div></nav>`}
+
+function render(){const a=$('#app');
+ if(!me()){a.innerHTML=auth();return}
+ const v=S.view,t=S.tab;let c;
+ if(v==='admin')c=admin();else if(v==='employer')c=t==='post'?post():t==='profile'?profile():employer();
+ else c=t==='search'?search():t==='apps'?myApps():t==='profile'?profile():home();
+ a.innerHTML=`<header><div class="logo">Sisi<i>Matches</i></div><div class="demo"><select id="vw" aria-label="Vista de demostración">${[['student','Demo: estudiante'],['employer','Demo: ofertante'],['admin','Demo: admin']].map(([k,l])=>`<option value="${k}" ${v===k?'selected':''}>${l}</option>`).join('')}</select></div></header>${c}${nav()}`;
+ renderSheet()}
+function renderSheet(){let m=$('.modal');if(m)m.remove();if(!sheet)return;m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${sheet()}<div class="row"><button class="sm sec" data-a="close">Cerrar</button></div></div>`;document.body.append(m)}
+const J=id=>S.jobs.find(j=>j.id===id);
+
+function jobSheet(id){return()=>{const j=J(id),a=j.apps.find(a=>a.uid==='me'),ok=S.view==='student'&&isVer();
+ return `<h2>${esc(j.title)}</h2><div class="meta">${esc(j.cat)} · ${esc(j.when)} · ${esc(j.dur)} · ${esc(j.zone)} (zona aproximada)</div>
+ <p class="pay">${j.pay} €/h</p><p>${esc(j.desc)}</p><p class="meta">Publicado por ${esc(j.owner)}. Pago directo entre las partes.</p>
+ <div class="row">${S.view!=='student'?'<span class="meta">Cambia a la vista de estudiante para postularte.</span>':a?`<span class="pill">Ya te has apuntado</span>`:`<button data-a="apply" data-id="${j.id}" ${ok?'':'disabled'}>Apuntarme</button>${ok?'':'<span class="meta">Verifica tu estudio en Perfil.</span>'}`}
+ <button class="sm sec" data-a="report" data-id="${j.id}">Denunciar</button></div>`}}
+function chatSheet(id){return()=>{const j=J(id),emp=S.view==='employer',who=emp?(j.apps.find(a=>a.status==='accepted')||{}).name:j.owner;
+ return `<h2>Chat con ${esc(who||'')}</h2><div class="meta">${esc(j.title)}. Nunca compartas datos bancarios.</div><div class="msgs">${j.chat.map(m=>`<div class="m ${m.f===S.view?'me':''}">${esc(m.t)}</div>`).join('')||'<span class="meta">Escribe el primer mensaje.</span>'}</div>
+ <div class="row"><input id="cm" placeholder="Mensaje" style="flex:1" aria-label="Mensaje"><button data-a="send" data-id="${j.id}">Enviar</button></div>`}}
+function rateSheet(id){return()=>`<h2>Valorar</h2><p>¿Qué tal ha ido?</p><div class="row">${[1,2,3,4,5].map(n=>`<button class="sm sec" data-a="star" data-id="${id}" data-n="${n}" aria-label="${n} estrellas">${n}★</button>`).join('')}</div>`}
+function legalSheet(k){return()=>`<h2>${LEGAL[k][0]}</h2><p>${LEGAL[k][1]}</p>`}
+const setS=f=>{sheet=f;renderSheet()};
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,id=el.dataset.id,v=x=>$(x)?.value.trim();
+ if(a!=='legal'&&a!=='tab'&&a!=='confirm')e.preventDefault();else e.preventDefault();
+ const go=()=>{save();render()};
+ if(a==='signup'){if(!v('#n')||!/\S+@\S+\.\S+/.test(v('#e')))return toast('Escribe tu nombre y un correo válido.');
+  if(!$('#c1').checked||!$('#c2').checked)return toast('Debes confirmar la mayoría de edad y aceptar los términos.');
+  S.me={name:v('#n'),email:v('#e'),ver:'none',idv:false};S.view=$('#r').value;S.tab='home';go()}
+ else if(a==='logout'){S.me=null;go()}
+ else if(a==='del'){if(confirm('¿Borrar tu cuenta y tus datos? No se puede deshacer.')){S=seed();go();toast('Cuenta borrada.')}}
+ else if(a==='tab'){S.tab=el.dataset.t;go()}
+ else if(a==='legal')setS(legalSheet(el.dataset.k));
+ else if(a==='close'){sheet=null;renderSheet()}
+ else if(a==='when'){S.q.when=el.dataset.w;go()}
+ else if(a==='job')setS(jobSheet(id));
+ else if(a==='apply'){const j=J(id);j.apps.push({uid:'me',name:me().name,status:'pending',ver:true,cv:!!me().cv});sheet=null;go();toast('Te has apuntado. El ofertante responderá.')}
+ else if(a==='simacc'){J(id).apps.find(x=>x.uid==='me').status='accepted';J(id).status='filled';go();toast('Aceptada. Ya puedes chatear.')}
+ else if(a==='report'){const j=J(id);S.reports.push({id:j.id,title:j.title,why:'Denuncia de un usuario'});sheet=null;go();toast('Denuncia enviada. Gracias.')}
+ else if(a==='chat')setS(chatSheet(id));
+ else if(a==='send'){const t=v('#cm');if(!t)return;J(id).chat.push({f:S.view,t});save();setS(chatSheet(id))}
+ else if(a==='mailv'||a==='docv'||a==='saveprof'){const m=me();readForm();
+  if(a==='saveprof'){go();return toast('Guardado.')}
+  const miss=stuMissing(m);if(miss.length){go();return toast('Completa antes: '+miss.join(', ')+'.')}
+  if(a==='mailv'){const u=v('#ue')||'';if(!/@.+\.(edu|es)$/i.test(u)||!/(edu|upv|uv\.|ua\.|uji|um\.|ucm|uam|ub\.|uab|upc|us\.|ugr|alumn)/i.test(u)){go();return toast('Usa tu correo institucional (p. ej. @alumno.upv.es).')}m.uemail=u;m.mailSent=true;go()}
+  else{if(!m.cert){go();return toast('Sube tu certificado de estudiante.')}S.pending.push({id:'p'+Date.now(),kind:'stu',name:m.name,email:m.email,doc:m.cert,info:m.studies+' · '+m.uni+' · '+m.phone});m.ver='pending';go();toast('Enviado a revisión.')}}
+ else if(a==='confirm'){me().ver='ok';go();toast('Correo confirmado. Ya estás verificado.')}
+ else if(a==='idv'){const m=me();readForm();const miss=empMissing(m);if(miss.length){go();return toast('Completa antes: '+miss.join(', ')+'.')}
+  if(!m.dniDoc){go();return toast('Sube la foto del DNI/NIE o CIF.')}
+  S.pending.push({id:'p'+Date.now(),kind:'emp',name:m.name,email:m.email,doc:m.dniDoc,info:(m.etype==='emp'?'CIF ':'DNI ')+m.dni+' · '+m.phone+' · '+m.city});m.idvp=true;go();toast('Enviado a verificación.')}
+ else if(a==='publish'){const t=v('#t'),p=parseFloat($('#p').value),ty=$('#ty').value,tm=v('#wt'),DN=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  if(!t||!tm||!(p>0)||!v('#z'))return toast('Rellena título, hora, pago y zona.');
+  let date,end,days,when;
+  if(ty==='now'){date=v('#wd');if(!date)return toast('Elige la fecha.');when=pd(date).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'})+', '+tm}
+  else{days=[...document.querySelectorAll('.dy:checked')].map(x=>+x.value);if(!days.length)return toast('Elige al menos un día.');date=v('#sd')||iso(0);end=v('#ed')||'2099-12-31';when=days.map(d=>DN[d-1]).join(', ')+', '+tm}
+  S.jobs.unshift({id:'j'+Date.now(),type:ty,title:t,cat:$('#ct').value,when,date,end,days,dur:v('#d')||'—',pay:p,zone:v('#z'),desc:v('#ds'),owner:me().name,mine:1,
+  apps:[{uid:'s1',name:'Marcos T. (UPV)',status:'pending',ver:true,cv:true},{uid:'s2',name:'Lucía P. (UV)',status:'pending',ver:true}],chat:[],status:'open'});S.tab='home';go();toast('Publicada.')}
+ else if(a==='acc'||a==='rej'){const j=J(id);j.apps.forEach(x=>{if(x.uid===el.dataset.u)x.status=a==='acc'?'accepted':'rejected';else if(a==='acc'&&x.status==='pending')x.status='rejected'});if(a==='acc')j.status='filled';go()}
+ else if(a==='done'){J(id).status='done';go()}
+ else if(a==='rate')setS(rateSheet(id));
+ else if(a==='star'){J(id).rated=el.dataset.n;sheet=null;go();toast('Gracias por valorar.')}
+ else if(a==='apv'||a==='rjv'){const p=S.pending.find(x=>x.id===id),ok=a==='apv';
+  if(p&&p.email===me().email){if(p.kind==='emp'){me().idv=ok;me().idvp=false}else me().ver=ok?'ok':'none'}
+  S.pending=S.pending.filter(x=>x.id!==id);go();toast(ok?'Aprobado. Documento borrado.':'Rechazado.')}
+ else if(a==='rmjob'){S.jobs=S.jobs.filter(j=>j.id!==id);S.reports=S.reports.filter(r=>r.id!==id);go();toast('Oferta retirada.')}
+ else if(a==='dismiss'){S.reports.splice(+el.dataset.i,1);go()}
+});
+document.addEventListener('change',e=>{const t=e.target;
+ if(t.id==='vw'){S.view=t.value;S.tab='home';save();render()}
+ else if(t.id==='ty'){$('#occ').hidden=t.value!=='now';$('#rec').hidden=t.value!=='week'}
+ else if(t.type==='file'){readForm();me()[t.dataset.k]=t.files[0]?t.files[0].name:'';save();render()}
+ else if(t.dataset.f){S.q[t.dataset.f]=t.dataset.f==='min'?+t.value:t.value;save();render()}});
+document.addEventListener('input',e=>{if(e.target.id==='qt'){S.q.txt=e.target.value;save();const p=e.target.selectionStart;render();const i=$('#qt');i.focus();i.setSelectionRange(p,p)}});
+load();render();
+</script></body></html>
