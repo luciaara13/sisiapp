@@ -1,21 +1,23 @@
 {
-  "name": "SisiMatches",
-  "short_name": "Sisi",
-  "description": "Trabajos cortos cerca de ti con estudiantes verificados",
-  "start_url": "/",
+  "name": "SISImatch",
+  "short_name": "SISI",
+  "description": "An app to find and offer job",
+  "start_url": "/https://sisiapp-5oncjnkxa-mis-webs.vercel.app/",
   "display": "standalone",
-  "background_color": "#fff8f1",
-  "theme_color": "#d9480f",
+  "background_color": "#000000",
+  "theme_color": "#e27819",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "https://py8fhxnkzwtsqdo9.public.blob.vercel-storage.com/front/favicon/vercel/android-chrome-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icon-512.png",
+      "src": "https://py8fhxnkzwtsqdo9.public.blob.vercel-storage.com/front/favicon/vercel/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
-  ]
+  ],
+  "id": "sisiapp",
+  "lang": "es"
 }
