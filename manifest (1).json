@@ -1,0 +1,14 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "sisiapp.vercel",
+  "orientation": "any",
+  "scope": "/https://sisiapp.vercel.app/",
+  "short_name": "sisiapp.vercel",
+  "start_url": "/https://sisiapp.vercel.app/",
+  "theme_color": "#ffffff",
+  "id": "sisiapp",
+  "description": "an app to find and offer job",
+  "lang": "es"
+}
